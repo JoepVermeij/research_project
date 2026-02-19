@@ -1,94 +1,95 @@
-# Research Project: QR Code-Based Attendance Registration
+# Onderzoeksproject: QR-code-gebaseerde aanwezigheidsregistratie
 
-**Course:** 42TIW1140 Research Project (2025-26-PWTIW)  
-**Supervisor:** Kris Hermans — Kris.Hermans@pxl.be
+**Vak:** 42TIW1140 Research Project (2025-26-PWTIW)  
+**Begeleider:** Kris Hermans — Kris.Hermans@pxl.be
 
-## Project Overview
+## Projectoverzicht
 
-This research project investigates **attendance registration via QR codes** for events such as job fairs and expos. The goal is to conduct a practice-oriented study that is both theoretically grounded (literature review) and practically validated (proof of concept).
+Dit onderzoeksproject richt zich op **aanwezigheidsregistratie via QR-codes** voor het Handshake-event van Hogeschool PXL. Het doel is een praktijkgericht onderzoek uit te voeren dat zowel theoretisch onderbouwd (literatuurstudie) als praktisch gevalideerd (proof of concept) is.
 
-An existing student project is already building a functional system with a **.NET backend** and **Vue.js frontend**, covering the core functional requirements. Our research focuses on the **non-functional requirements** that a follow-up project should address, specifically:
+Een bestaand studentenproject bouwt momenteel een functioneel systeem met een **.NET backend** en **Vue.js frontend**, gericht op de functionele requirements. Ons onderzoek focust op de **niet-functionele requirements** voor een vervolgproject, namelijk:
 
-| Requirement | Description |
+| Vereiste | Beschrijving |
 |---|---|
-| **Fraud Resistance** | QR codes must not be copyable or shareable — ensuring integrity and reliability of attendance data. |
-| **Robustness** | The system must remain operational during WiFi dropouts (several minutes) — covering reliability, availability, and performance. |
-| **Security** | The system must be resistant to hacking and protect personal data appropriately. |
+| **Fraudebestendigheid** | QR-codes mogen niet gekopieerd of gedeeld worden — de integriteit en betrouwbaarheid van aanwezigheidsdata moet gegarandeerd zijn. |
+| **Robuustheid** | Het systeem moet operationeel blijven bij WiFi-uitval (enkele minuten) — dit omvat betrouwbaarheid, beschikbaarheid en performantie. |
+| **Veiligheid** | Het systeem moet bestand zijn tegen hacking en persoonsgegevens adequaat beschermen. |
 
-### System Context
+### Systeemcontext
 
-- Companies register for an event
-- Each student receives a unique QR code
-- Matchmaking: a company scans a student's QR code
-- Companies can download a student's CV after scanning
-- Statistics are generated (popular companies, student engagement, etc.)
+- Bedrijven registreren zich voor het event
+- Studenten en bedrijven hebben elk een unieke QR-code
+- Bidirectioneel scannen: studenten scannen bedrijven en bedrijven scannen studenten
+- Bedrijven kunnen na het scannen het CV van een student downloaden
+- Statistieken worden gegenereerd (populaire bedrijven, inspanning van studenten, etc.)
 
-## Research Approach
+## Onderzoeksaanpak
 
-The project follows a structured research process:
+Het project volgt een gestructureerd onderzoeksproces:
 
-1. **Context & Motivation** — Describe the problem context using the 6W method (What, Who, When, Why, Where, How)
-2. **Problem Definition** — Formulate a clear central research question and sub-questions (must be specific, scoped, unambiguous, and non-Googleable)
-3. **Research Methodology** — Define a concrete, pragmatic step-by-step plan
-4. **Literature Study** — Collect, evaluate (CRAAP test), and synthesize relevant sources
-5. **Execution Phase** — Build a self-designed proof of concept (not a tutorial reproduction), document experiments and collect artifacts
-6. **Conclusion & Recommendations** — Provide a well-founded advisory based on findings
+1. **Context & Aanleiding** — De probleemcontext beschrijven aan de hand van de 6W-methode (Wat, Wie, Wanneer, Waarom, Waar, Hoe)
+2. **Probleemomschrijving** — Een heldere centrale onderzoeksvraag en deelvragen formuleren (specifiek, afgebakend, ondubbelzinnig en niet-Googlebaar)
+3. **Onderzoeksmethode** — Een concreet, pragmatisch stappenplan opstellen
+4. **Literatuurstudie** — Relevante bronnen verzamelen, beoordelen (CRAAP-test) en synthetiseren
+5. **Uitvoeringsfase** — Een zelfbedachte proof of concept bouwen (geen tutorial nagemaakt), experimenten documenteren en artefacten verzamelen
+6. **Conclusie & Aanbevelingen** — Een gefundeerd advies formuleren op basis van de bevindingen
 
-## Deliverables
+## Op te leveren
 
-### Paper Structure
+### Paperstructuur
 
-| Section | Length |
+| Onderdeel | Omvang |
 |---|---|
-| Title page | — |
-| Project description | 1 page |
-| Table of contents | 1 page |
-| List of abbreviations and terms | 1 page (if applicable) |
-| Research question | 1 page |
-| Research methodology | 1 page |
-| Literature review | 2 pages |
-| Conclusion, recommendations, results | 1 page |
-| AI usage accountability | 1 page |
-| Bibliography | 1 page |
+| Titelpagina | — |
+| Projectomschrijving | 1 pagina |
+| Inhoudsopgave | 1 pagina |
+| Lijst van afkortingen en termen | 1 pagina (indien van toepassing) |
+| Onderzoeksvraag | 1 pagina |
+| Onderzoeksmethode | 1 pagina |
+| Bronbespreking | 2 pagina's |
+| Conclusie, aanbevelingen, resultaten | 1 pagina |
+| Verantwoording AI-gebruik | 1 pagina |
+| Bibliografie | 1 pagina |
 
-### Presentation
+### Presentatie
 
-- Realization walkthrough
-- Artifacts showcase
-- Live demonstration of the POC
-- Conclusion
+- Toelichting realisatie
+- Overzicht artefacten
+- Live demonstratie van de POC
+- Conclusie
 
-### Individual Reflection
+### Individuele reflectie
 
-Each team member submits an individual reflection on the process, using a method taught in Communication Skills or an approved alternative.
+Elk groepslid levert een individuele reflectie in over het doorlopen proces, aan de hand van een methode aangeleerd bij Communicatievaardigheden of een goedgekeurd alternatief.
 
 ## Planning
 
-| Phase | Deliverable | Activities |
+| Fase | Op te leveren | Activiteiten |
 |---|---|---|
-| **Contact Moment 1** | Draft 1 | Group formation, research question, research methodology |
-| **Contact Moment 2** | Draft 2 | Progress update, literature review, prototype (initial), preliminary results, feedback |
-| **Contact Moment 3** | Final Paper + Presentation | Submit final paper, individual reflection, deliver presentation |
+| **Contactmoment 1** | Draft 1 | Groepsindeling, onderzoeksvraag, onderzoeksmethode |
+| **Contactmoment 2** | Draft 2 | Stand van zaken, bronbespreking, prototype (aanzet), voorlopige resultaten, feedback |
+| **Contactmoment 3** | Definitieve paper + presentatie | Paper inleveren, individuele reflectie inleveren, presentatie geven |
 
-## AI Usage Policy
+## Beleid AI-gebruik
 
-AI tools may be used, but responsibly:
+AI-tools mogen worden gebruikt, maar op een verantwoorde manier:
 
-- **Be critical** — Verify every AI-suggested source using the CRAAP method to eliminate hallucinations (document as artifact)
-- **Be transparent** — Describe which AI tools were used and for which tasks, including example prompts and outputs (document as artifact)
-- **Learn to prompt** — Effective use of GenAI is considered an essential skill
-- **Be honest** — Never copy AI output verbatim; demonstrate that you can process it into original, personal text
+- **Wees kritisch** — Controleer elke door AI gesuggereerde bron met de CRAAP-methode om hallucinaties te elimineren (documenteer als artefact)
+- **Wees transparant** — Beschrijf welke AI-tools je hebt gebruikt en voor welke taken, inclusief voorbeeldprompts en -output (documenteer als artefact)
+- **Leer prompten** — Effectief gebruik van GenAI wordt beschouwd als een essentiële vaardigheid
+- **Wees integer** — Neem nooit letterlijk teksten over van AI; toon aan dat je de output kunt verwerken tot een persoonlijke tekst
 
-## Evaluation
+## Evaluatie
 
-- First exam opportunity: group assignment with individual grading
-- Second exam opportunity: individual assignment
-- Attendance is mandatory for all contact moments (on campus)
+- Eerste examenkans: groepsopdracht met individuele beoordeling
+- Tweede examenkans: individuele opdracht
+- Aanwezigheid is verplicht voor alle contactmomenten (on campus)
 
-## Repository Structure
+## Repositorystructuur
 
 ```
 research_project/
-├── course_material/       # Course documentation and assignment briefs
-├── README.md              # This file
+├── course_material/       # Cursusdocumentatie en opdrachtbeschrijvingen
+├── onderzoeksvraag/       # Uitwerking onderzoeksvraag en opties
+├── README.md              # Dit bestand
 ```
