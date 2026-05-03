@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PXL Handshake Event - Secure QR Registration</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN for POC) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- CryptoJS for Encryption -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    
+    <!-- LocalForage for IndexedDB offline storage -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+    
+    <!-- HTML5 QR Code Scanner -->
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    
+    <!-- QRCode.js for generating QR -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body class="antialiased">
+    <div id="app" v-cloak class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="glass-panel sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                    PXL
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Handshake Event</h1>
+                    <p class="text-xs text-indigo-300">Secure Registration</p>
+                </div>
+            </div>
+            
+            <div v-if="currentView !== 'home'" class="flex items-center space-x-4">
+                <div :class="['status-badge', isOnline ? 'status-online' : 'status-offline']">
+                    <div class="pulse-dot" :style="{ backgroundColor: isOnline ? '#34D399' : '#F87171' }"></div>
+                    {{ isOnline ? 'Online' : 'Offline Mode' }}
+                </div>
+                <button @click="currentView = 'home'" class="text-sm text-gray-300 hover:text-white transition">
+                    Exit
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow flex items-center justify-center p-6">
+            
+            <!-- Home Selection View -->
+            <div v-if="currentView === 'home'" class="w-full max-w-2xl grid md:grid-cols-2 gap-6 animate-slide-up">
+                <div class="glass-panel p-8 rounded-2xl flex flex-col items-center text-center hover:bg-slate-800/50 transition cursor-pointer" @click="currentView = 'student'">
+                    <div class="w-20 h-20 bg-indigo-500/20 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0v7"></path></svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2">I am a Student</h2>
+                    <p class="text-gray-400 text-sm mb-6">Generate your secure, dynamic QR code to share your CV with companies.</p>
+                    <button class="btn-primary w-full py-3 rounded-lg font-medium text-white mt-auto">Enter as Student</button>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl flex flex-col items-center text-center hover:bg-slate-800/50 transition cursor-pointer" @click="currentView = 'company'">
+                    <div class="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-10 h-10 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2">We are a Company</h2>
+                    <p class="text-gray-400 text-sm mb-6">Scan student QR codes securely, even without an active internet connection.</p>
+                    <button class="bg-emerald-600 hover:bg-emerald-500 w-full py-3 rounded-lg font-medium text-white transition mt-auto">Enter as Company</button>
+                </div>
+            </div>
+
+            <!-- Student View -->
+            <div v-if="currentView === 'student'" class="w-full max-w-md animate-slide-up">
+                
+                <!-- GDPR Consent Flow -->
+                <div v-if="!student.hasConsent" class="glass-panel p-8 rounded-2xl">
+                    <div class="flex justify-center mb-6">
+                        <div class="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-400">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        </div>
+                    </div>
+                    <h2 class="text-2xl font-bold text-center mb-4">GDPR Consent</h2>
+                    <p class="text-gray-300 text-sm mb-6">To participate in the Handshake Event and share your details with companies, we require your consent to process your data (CV and Personally Identifiable Information).</p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <label class="flex items-start space-x-3 cursor-pointer group">
+                            <div class="flex-shrink-0 mt-1">
+                                <input type="checkbox" v-model="student.consentGiven" class="w-5 h-5 rounded bg-slate-800 border-gray-600 text-indigo-600 focus:ring-indigo-500">
+                            </div>
+                            <span class="text-sm text-gray-300 group-hover:text-white transition">I explicitly consent to sharing my CV and profile data with companies that scan my QR code.</span>
+                        </label>
+                    </div>
+
+                    <button 
+                        @click="grantConsent" 
+                        :disabled="!student.consentGiven"
+                        :class="['w-full py-3 rounded-lg font-medium transition', student.consentGiven ? 'btn-primary text-white' : 'bg-slate-700 text-gray-400 cursor-not-allowed']"
+                    >
+                        Generate My QR Code
+                    </button>
+                </div>
+
+                <!-- QR Display -->
+                <div v-else class="glass-panel p-8 rounded-2xl flex flex-col items-center">
+                    <h2 class="text-xl font-bold mb-2">Your Personal QR Code</h2>
+                    <p class="text-sm text-gray-400 mb-8 text-center">Present this to companies. For your security, this code refreshes automatically.</p>
+                    
+                    <div class="qr-container mb-6 relative">
+                        <div id="qrcode"></div>
+                        
+                        <!-- Refresh Overlay -->
+                        <div v-if="student.isRefreshing" class="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center rounded-lg animate-fade-in">
+                            <svg class="animate-spin h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full">
+                        <div class="flex justify-between text-xs text-gray-400 mb-1">
+                            <span>Valid for</span>
+                            <span>{{ student.timeRemaining }}s</span>
+                        </div>
+                        <div class="timer-bar-container">
+                            <div class="timer-bar" :style="{ width: (student.timeRemaining / 30 * 100) + '%' }"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 text-xs text-center text-emerald-400 bg-emerald-400/10 py-2 px-4 rounded-lg flex items-center justify-center">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        Fraud Protection Active
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company View -->
+            <div v-if="currentView === 'company'" class="w-full max-w-2xl grid md:grid-cols-2 gap-6 animate-slide-up">
+                <!-- Scanner Side -->
+                <div class="glass-panel p-6 rounded-2xl flex flex-col">
+                    <h2 class="text-xl font-bold mb-4">Scan Student QR</h2>
+                    
+                    <div class="bg-slate-900 rounded-xl p-1 mb-4">
+                        <div id="qr-reader"></div>
+                    </div>
+                    
+                    <div v-if="company.lastScanStatus" :class="['mt-4 p-3 rounded-lg text-sm flex items-start', company.lastScanStatus.type === 'success' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-red-500/20 text-red-300']">
+                        <svg v-if="company.lastScanStatus.type === 'success'" class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <svg v-else class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        {{ company.lastScanStatus.message }}
+                    </div>
+                </div>
+                
+                <!-- Data / Sync Side -->
+                <div class="glass-panel p-6 rounded-2xl flex flex-col">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold">Captured Scans</h2>
+                        <span class="text-xs bg-slate-700 px-2 py-1 rounded text-gray-300">{{ company.scans.length }} Total</span>
+                    </div>
+                    
+                    <div class="space-y-3 flex-grow overflow-y-auto max-h-[400px] pr-2">
+                        <div v-if="company.scans.length === 0" class="text-center py-10 text-gray-500 text-sm border border-dashed border-gray-700 rounded-xl">
+                            No scans yet.
+                        </div>
+                        
+                        <div v-for="scan in company.scans" :key="scan.id" class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-300">
+                                    {{ scan.studentName.charAt(0) }}
+                                </div>
+                                <div>
+                                    <p class="font-medium text-sm">{{ scan.studentName }}</p>
+                                    <p class="text-xs text-gray-400">{{ formatTime(scan.timestamp) }}</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end">
+                                <span v-if="scan.synced" class="text-xs text-emerald-400 flex items-center">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    Synced
+                                </span>
+                                <span v-else class="text-xs text-amber-400 flex items-center">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Pending
+                                </span>
+                                <span class="text-[10px] text-gray-500 mt-1 flex items-center" title="Data securely encrypted in IndexedDB">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                    Encrypted
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 pt-4 border-t border-slate-700">
+                        <button 
+                            @click="forceSync" 
+                            :disabled="!isOnline || pendingScansCount === 0 || company.isSyncing"
+                            :class="['w-full py-2.5 rounded-lg text-sm font-medium transition flex items-center justify-center', (!isOnline || pendingScansCount === 0 || company.isSyncing) ? 'bg-slate-800 text-gray-500 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-500 text-white']"
+                        >
+                            <svg v-if="company.isSyncing" class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            <svg v-else class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            {{ company.isSyncing ? 'Syncing...' : `Sync ${pendingScansCount} Pending Scans` }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Application Logic -->
+    <script src="app.js"></script>
+</body>
+</html>

@@ -85,11 +85,27 @@ AI-tools mogen worden gebruikt, maar op een verantwoorde manier:
 - Tweede examenkans: individuele opdracht
 - Aanwezigheid is verplicht voor alle contactmomenten (on campus)
 
+## Proof of Concept (POC)
+
+Voor dit onderzoek is een **Proof of Concept (POC)** ontwikkeld om de niet-functionele vereisten (Fraudebestendigheid, Robuustheid/Offline-first en Veiligheid/GDPR) in de praktijk te valideren. 
+De POC is een Vue 3 (CDN-based) webapplicatie die lokaal gedraaid kan worden.
+
+### Hoe de POC te starten:
+1. Open een terminal en navigeer naar de map: `cd project/poc-app`
+2. Start een lokale server: `python3 -m http.server`
+3. Open je webbrowser en ga naar `http://localhost:8000`
+
+Voor een gedetailleerde technische verantwoording over hoe de POC de literatuurstudie implementeert, zie het [EXPLANATION.md](project/poc-app/EXPLANATION.md) bestand in de poc-app map.
+
 ## Repositorystructuur
 
 ```
 research_project/
 ├── course_material/       # Cursusdocumentatie en opdrachtbeschrijvingen
 ├── onderzoeksvraag/       # Uitwerking onderzoeksvraag en opties
+├── project/
+│   ├── poc-app/           # De Proof of Concept webapplicatie (Vue.js)
+│   ├── images/            # Afbeeldingen ter ondersteuning van de POC
+│   └── PXL.pdf            # Onderzoeksdocument
 ├── README.md              # Dit bestand
 ```
