@@ -1,0 +1,15 @@
+V.	Onderzoeksmethode
+Om een antwoord te formuleren op de hoofdvraag en de deelvragen maken we gebruik van een praktijkgerichte onderzoeksaanpak. Dit onderzoek combineert deskresearch met experimenteel onderzoek. Het onderzoeksproces is opgedeeld in twee hoofdfasen: een theoretische literatuurstudie en een praktische uitvoeringsfase.
+1	Literatuurstudie (Deskresearch)
+In de eerste fase voeren we deskresearch uit om de theoretische basis te leggen voor de non-functionele vereisten van het registratiesysteem.
+Verzamelen en beoordelen: we zoeken naar betrouwbare bronnen over QR-codebeveiliging, offline-first datasynchronisatie (Vue.js/.NET) en GDPR-richtlijnen. Uit de gevonden literatuur selecteren we de drie meest relevante bronnen. Deze worden kritisch geëvalueerd op betrouwbaarheid en actualiteit aan de hand van de CRAAP-test. De ingevulde testen worden als artefacten bewaard in Microsoft Teams.
+Verwerken: de bevindingen uit deze drie bronnen worden verwerkt en met elkaar vergeleken in een bronbespreking.
+2	Uitvoeringsfase
+De theorie uit de literatuurstudie wordt vervolgens in de praktijk getoetst door middel van experimenteel onderzoek. Aangezien het hoofdproject (.NET-backend en Vue.js-frontend) door reguliere studenten wordt ontwikkeld, focussen wij ons in deze fase uitsluitend op een voorbereidende studie voor een vervolgproject.
+Ontwikkeling Proof of Concept (POC): we bouwen een zelfbedachte, losstaande POC die relevant is voor het project zonder deze te integreren in het bestaande systeem. We maken hierbij geen bestaande tutorials na maar richten de applicatie specifiek in op onze onderzoeksvragen.
+Binnen deze POC voeren we gerichte testen uit voor de drie non-functionele vereisten:
+•	Fraudebestendigheid: we testen mechanismen om te voorkomen dat QR-codes onbeperkt gekopieerd of doorgestuurd kunnen worden.
+•	Robuustheid: we simuleren netwerkuitval om te testen of de applicatie data lokaal kan vasthouden en betrouwbaar kan synchroniseren zodra de verbinding herstelt.
+•	Veiligheid en GDPR: we bouwen in de Vue.js-frontend een expliciete consent-flow met een verplichte checkbox waarmee de student vooraf akkoord moet gaan voordat persoonsgegevens (naam, CV) gedeeld kunnen worden met scannende bedrijven. Daarnaast versleutelen we de offline wachtrij in IndexedDB met AES-GCM 256-bit via de Web Crypto API, zodat persoonsgegevens en CV-data niet als platte tekst op het apparaat staan tijdens netwerkuitval. We testen vervolgens drie zaken: (1) of registratie zonder consent geblokkeerd wordt, (2) of de inhoud van IndexedDB onleesbaar is bij inspectie via de DevTools en (3) of de versleutelde data correct ontsleuteld en gesynchroniseerd wordt zodra de verbinding hersteld is.
+Documentatie: tijdens de experimenten documenteren we onze stappen nauwkeurig. We loggen meetgegevens, praktische problemen en de bijbehorende oplossingen. Deze data en eventuele testscripts verzamelen we als artefacten op Teams.
+Analyse & Advies: Vanuit de POC formuleren we een gefundeerde conclusie en een advies voor het daadwerkelijke project.
